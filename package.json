@@ -1,0 +1,32 @@
+{
+  "name": "rag-mvp",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "ingest": "tsx src/injest.ts",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "serve": "node dist/server.js"
+  },
+  "dependencies": {
+    "@chroma-core/default-embed": "^0.1.8",
+    "@chroma-core/ollama": "^0.1.7",
+    "@langchain/community": "^0.3.57",
+    "@langchain/core": "^0.3.42",
+    "@langchain/langgraph": "^0.2.55",
+    "@langchain/ollama": "^0.2.4",
+    "@langchain/textsplitters": "^0.1.0",
+    "chromadb": "^3.0.17",
+    "fastify": "^5.6.1",
+    "gray-matter": "^4.0.3",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "packageManager": "pnpm@10.18.2+sha512.9fb969fa749b3ade6035e0f109f0b8a60b5d08a1a87fdf72e337da90dcc93336e2280ca4e44f2358a649b83c17959e9993e777c2080879f3801e6f0d999ad3dd"
+}
