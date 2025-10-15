@@ -39,7 +39,8 @@ async function retrieve(state: GraphState): Promise<GraphState> {
 
 // TODO fine tune prompt
 const INSTRUCTIONS = `
-  You are a helpful assistant. Answer the question based on the provided context.
+  You are a helpful assistant. Answer the question based on the provided context. 
+  Use direct quotes from the referenced documents when applicable.
 `
 
 // Node 2: Generate answer using LLM

@@ -14,26 +14,61 @@
 		</header>
 
 		<main class="main">
-			<form name="searchForm" data-state="idle">
-				<legend>Search Documents</legend>
-				<p>
-					The words submitted are semantically proccessed against a limited
-					number of documents. Returned are the top 3 closest matches.
-				</p>
-				<div class="text-and-submit-button">
-					<input
-						name="question"
-						type="text"
-						placeholder="search documents..."
-					/>
-					<button type="submit">Search</button>
+			<div class="flex side-by-side">
+				<div class="flex-col">
+					<form name="searchForm" data-state="idle">
+						<legend>Search Documents</legend>
+						<p>
+							The words submitted are semantically proccessed against a limited
+							number of documents. Returned are the top 3 closest matches.
+						</p>
+						<div class="text-and-submit-button">
+							<input
+								name="question"
+								type="text"
+								placeholder="Ask a question..."
+							/>
+							<button type="submit">Search</button>
+						</div>
+
+						<p class="response-message"></p>
+					</form>
+
+					<h2>Search Results:</h2>
+          <p id="search-question"></p>
+					<ul id="search-results-list"></ul>
 				</div>
 
-				<p class="response-message"></p>
-			</form>
+				<div class="flex-col">
+					<form name="chatForm" data-state="idle">
+						<legend>Chat With Docs</legend>
+						<p>
+							RAG retreives the 3 closest matches. Those matches are then read
+							over by the LLM. The prompt is tuned with extra instructions. The
+							response will read in natural language.
+						</p>
+						<div class="text-and-submit-button">
+							<input
+								name="question"
+								type="text"
+								placeholder="Ask a question..."
+							/>
+							<button type="submit">Chat</button>
+						</div>
 
-			<h2>Search Results:</h2>
-			<ul id="search-results-list"></ul>
+						<p class="response-message"></p>
+					</form>
+
+					<h2>Chat Response:</h2>
+					<div id="chat-response">
+						<p class="question"></p>
+						<p class="answer"></p>
+
+						<h4>Documents Referenced</h4>
+						<ul class="context"></ul>
+					</div>
+				</div>
+			</div>
 
 			<!-- <h2>Search Data</h2> -->
 			<!-- <pre id="pre-search"></pre> -->

@@ -2,13 +2,17 @@ import { formHandler } from "./form.js"
 import { compose, transforms } from "./transforms.js"
 
 const searchForm = document.forms.namedItem("searchForm")
-if (!searchForm) throw new Error("form(s) not found")
+const chatForm = document.forms.namedItem("chatForm")
+if (!searchForm || !chatForm) throw new Error("form(s) not found")
 
-const searchResListEl = document.querySelector("#search-results-list")
-const preHealth = document.querySelector("#pre-health")
+const searchResListEl = document.getElementById("search-results-list")
+const chatResponseEl = document.getElementById("chat-response")
+const searchQuestionEl = document.getElementById("search-question")
+const preHealth = document.getElementById("pre-health")
+if (!preHealth) throw new Error("preHealth not found in dom")
 // const preSearch = document.querySelector("#pre-search")
-const searchResultCardTemplate = document.querySelector(
-	"#template-search-result-card"
+const searchResultCardTemplate = document.getElementById(
+	"template-search-result-card"
 )
 
 // Get all TODOs and display them on the screen
@@ -35,11 +39,14 @@ async function fetchHealthStats() {
 /**
  *
  * @param {{distances: number[], documents: string[], embeddings: string[], ids: string[], include: string[], metadatas: {title:string, filename: string}[], uris: string[]}} data
+ * @param {{question:string}} values
  */
-function uiRenderSearchResultEls(data) {
+function uiRenderSearchResultEls(data, values) {
 	searchResListEl.innerHTML = ""
 	if (!searchResultCardTemplate)
 		throw new Error("searchResultCardTemplate missing")
+
+	searchQuestionEl.textContent = `Question: ${values.question}`
 
 	data.documents[0].forEach((doc, i) => {
 		const metadata = data.metadatas[0][i]
@@ -72,7 +79,7 @@ function uiRenderSearchResultEls(data) {
       </tr>
       <tr>
         <th>uri:</th>
-        <td>http://?????</td>
+        <td>http://moeits.net/docs/${metadata.filename}</td>
       </tr>
     `
 		const li = document.createElement("li")
@@ -83,6 +90,56 @@ function uiRenderSearchResultEls(data) {
 
 /**
  *
+ * @param {{question: string, answer:string, context: {distances: number[], documents: string[], embeddings: string[], ids: string[], include: string[], metadatas: {title:string, filename: string}[], uris: string[]}}} data
+ */
+function uiRenderChatResponse(data) {
+	const questionPEl = chatResponseEl.querySelector("p.question")
+	questionPEl.textContent = `Question: ${data.question}`
+
+	const answerPEl = chatResponseEl.querySelector("p.answer")
+	answerPEl.textContent = data.answer
+
+	const contextListEl = chatResponseEl.querySelector("ul.context")
+	const context = JSON.parse(data.context)
+	console.log(context)
+	const metadataEls = context.metadatas[0].map((metadata) => {
+		const li = document.createElement("li")
+		li.textContent = `${metadata.title} | ${metadata.filename}`
+
+		return li
+	})
+	contextListEl.append(...metadataEls)
+}
+
+/**
+ * @param {{question: string}} values
+ */
+async function chatQuery(values) {
+	try {
+		const res = await fetch("/api/chat", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		})
+		const data = await res.json()
+		// console.log(JSON.stringify(data, null, 2))
+		// console.log(data)
+		// chatResponseEl.textContent = data.answer
+		uiRenderChatResponse(data)
+
+		// TODO stop being lazy
+		return {
+			...values,
+			data,
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+/**
  * @param {{question: string}} values
  */
 async function searchQuery(values) {
@@ -96,7 +153,7 @@ async function searchQuery(values) {
 		})
 		const data = await res.json()
 		// preSearch.textContent = JSON.stringify(data, null, 2)
-		uiRenderSearchResultEls(data)
+		uiRenderSearchResultEls(data, values)
 
 		// TODO stop being lazy
 		return {
@@ -130,6 +187,25 @@ async function searchQuery(values) {
 // searchBtn.addEventListener("click", searchQuery)
 
 async function ini() {
+	formHandler(chatForm, {
+		onSubmit: chatQuery,
+		onSuccess: "reset",
+		/** @param {{question:string}} values */
+		validate: (values) => {
+			//TODO validate min max of text
+			if (!values.question) throw new Error("missing question text")
+		},
+		transform: (raw) => {
+			return compose(
+				transforms.trimStrings,
+				transforms.addTimestamp
+				// transforms.metadata({
+				// 	authorId: uuid,
+				// })
+			)(raw)
+		},
+	})
+
 	formHandler(searchForm, {
 		onSubmit: searchQuery,
 		onSuccess: "reset",

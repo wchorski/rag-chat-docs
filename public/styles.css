@@ -1,41 +1,50 @@
-html,
-body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+html {
 	box-sizing: border-box;
+	height: 100%;
+	background: inherit;
 }
 
 body {
+	margin: 0;
+	padding: 0;
+	min-height: 100vh; /* allows growth beyond viewport */
 	background: #020024;
 	background: linear-gradient(
-		1deg,
-		rgba(2, 0, 36, 1) 0%,
-		rgba(40, 40, 84, 1) 71%,
-		rgba(56, 78, 82, 1) 100%
+		5deg,
+		rgb(17, 17, 17) 0%,
+		rgb(40, 40, 40) 91%,
+		rgb(50, 68, 71) 100%
 	);
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: cover;
 	color: white;
 
-	min-height: 100vh; /* use min-height so body can grow if content overflows */
-	min-height: 100dvh; /* use min-height so body can grow if content overflows */
+	/* min-height: 100vh;  */
+	/* min-height: 100dvh; */
 	display: flex;
 	flex-direction: column;
-	width: 100%; /* prefer 100% over 100vw to avoid overflow from scrollbars */
-	overflow-x: visible; /* default; don't force hidden unless you must */
+	/* width: 100%;  */
+	/* overflow-x: visible; */
 
 	& > header,
 	& > footer {
 		padding: 1rem;
 	}
+	& > main {
+		flex: 1 0 auto;
+		padding: 1rem;
+	}
+
+	& > footer {
+		background-color: rgba(0, 0, 0, 0.559);
+		flex-shrink: 0;
+	}
 }
 
-.main {
-	flex: 1; /* makes this area stretch to fill remaining height */
-	padding: 1rem;
-}
-
-footer {
-	background-color: rgba(0, 0, 0, 0.559);
+ul.nostyle {
+	list-style: none;
+	padding: 0;
 }
 
 #search-results-list {
@@ -86,6 +95,7 @@ article.search-result-card {
 /* FORMS */
 form {
 	background-color: #2b3639;
+	position: relative;
 
 	&[data-state="idle"] {
 		border-bottom: solid 5px skyblue;
@@ -100,6 +110,12 @@ form {
 		border-bottom: solid 5px red;
 		& > .response-message {
 			border-color: red;
+		}
+	}
+	&[data-state="pending"] {
+		border-bottom: dashed 5px yellow;
+		& > .response-message {
+			border-color: yellow;
 		}
 	}
 
@@ -122,6 +138,10 @@ form {
 	border: solid rgba(128, 128, 128, 0.253) 1px;
 	box-shadow: rgba(0, 0, 0, 0.081) 3px 3px 8px;
 	position: relative;
+
+	& > legend {
+		font-weight: bold;
+	}
 
 	& > label {
 		display: grid;
@@ -154,5 +174,78 @@ form {
 	& > input {
 		flex: 1;
 		height: clamp(1rem, 10rem, 2rem);
+	}
+}
+
+#chat-response {
+	background: black;
+	padding: 1rem;
+	border-radius: 17px;
+	border-left: solid skyblue 10px;
+	position: relative;
+	transition: opacity 2s;
+
+	& > p.question {
+		background-color: rgb(59, 59, 62);
+		padding: 0.3rem;
+	}
+	/* & > ul.context {
+    background-color: rgb(66, 66, 66);
+  } */
+}
+
+#chat-response::before {
+	content: "🤖";
+	position: absolute;
+	top: -24px;
+	left: -18px;
+	font-size: 36px;
+	text-shadow: 3px 3px 13px #78b9ff;
+}
+
+#chat-response:has(.answer:empty) {
+	opacity: 0;
+}
+
+/* animation */
+form[data-state="pending"]::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -6px;
+	height: 6px;
+	background: repeating-linear-gradient(
+		135deg,
+		#d4cd06 0 12px,
+		#474a22 12px 24px
+	);
+	background-size: 200% 100%;
+	animation: stripe-move 12s linear infinite;
+}
+
+@keyframes stripe-move {
+	from {
+		background-position: 0 0;
+	}
+	to {
+		background-position: -200% 0;
+	}
+}
+
+/* LAYOUTS */
+.flex.side-by-side {
+	display: flex;
+	gap: 1rem;
+	justify-content: space-between;
+	flex-wrap: wrap;
+
+	& > div {
+		flex: 1;
+		padding: 1rem;
+	}
+
+	& > div:first-child {
+		border-right: solid black 1px;
 	}
 }

@@ -36,6 +36,7 @@ export function formHandler(form, options) {
 
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault()
+    form.setAttribute("data-state", "pending")
 
 		const resMsgEl = form.querySelector(messageSel)
 		if (!resMsgEl) throw new Error(`No element found: ${messageSel}`)
@@ -101,7 +102,7 @@ export const successHandlers = {
 	reset: (form, res, { resMsgEl, successTimeout }) => {
 		form.reset()
 		form.setAttribute("data-state", "success")
-		resMsgEl.textContent = `Success! | timestamp: ${res.dateCreated}`
+		resMsgEl.textContent = `Success! | timestamp: ${new Date(res.dateCreated).toLocaleString()}`
 
 		setTimeout(() => {
 			form.setAttribute("data-state", "idle")
