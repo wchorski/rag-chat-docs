@@ -1,0 +1,9 @@
+import type { FastifyInstance } from "fastify"
+import fastifyPlugin from "fastify-plugin"
+
+async function testFunc (fastify:FastifyInstance, options:Object) {
+  // fastify.register(fastifyMongo)
+  console.log('testFunc');
+}
+
+export default fastifyPlugin(testFunc)

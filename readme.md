@@ -148,3 +148,14 @@ You can modify these constants in the code:
 
 ## Database & LLM
 are deployed with seperate docker containers
+
+## TODO
+- [ ] `/api/upload` for user submitted documents
+- [ ] prevent duplicates (id is a has of file, modified file seen as new file)
+- [ ] filer watcher for living docs
+
+---
+
+## Credits
+- https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
+- https://github.com/fastify/fastify-env
