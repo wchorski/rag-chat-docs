@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RAG Chat Docs</title>
+		<style>
+			/* Write your CSS here */
+		</style>
+		<link rel="stylesheet" href="/styles.css" />
+		<script src="/page.js" type="module" defer></script>
+	</head>
+	<body>
+		<header>
+			<h1>RAG Chat Docs</h1>
+		</header>
+
+		<main class="main">
+			<form name="searchForm" data-state="idle">
+				<legend>Search Documents</legend>
+				<p>
+					The words submitted are semantically proccessed against a limited
+					number of documents. Returned are the top 3 closest matches.
+				</p>
+				<div class="text-and-submit-button">
+					<input
+						name="question"
+						type="text"
+						placeholder="search documents..."
+					/>
+					<button type="submit">Search</button>
+				</div>
+
+				<p class="response-message"></p>
+			</form>
+
+			<h2>Search Results:</h2>
+			<ul id="search-results-list"></ul>
+
+			<!-- <h2>Search Data</h2> -->
+			<!-- <pre id="pre-search"></pre> -->
+		</main>
+
+		<footer>
+			<h2>Database Health</h2>
+			<pre id="pre-health"></pre>
+		</footer>
+
+		<template id="todo-item-template">
+			<li>
+				<span class="todo-text"></span>
+				<button class="delete-todo">Delete</button>
+				<button class="update-todo">Done</button>
+			</li>
+		</template>
+
+		<template id="template-search-result-card">
+			<article class="search-result-card">
+				<header>
+					<h3 class="title">Beagle</h3>
+					<label class="distance">
+						<span>51% match distance</span>
+						<meter
+							min="0"
+							max="1"
+							low="0.4"
+							high="1"
+							optimum="0.6"
+							value="0.51083297"
+						></meter>
+					</label>
+				</header>
+
+				<p class="document">
+					Beagles have a short, dense coat that typically features tri-color
+					combinations of white, black, and brown. Their floppy ears are long
+					and soft, adding to their charming, gentle expression. They stand
+					about 13-15 inches tall and weigh 20-30 pounds. \n\nBeagles are
+					curious, merry, and affectionate dogs with a strong sense of smell.
+					They are social and friendly but can be stubborn due to their
+					independent streak. \n\nOriginating in England, Beagles were bred as
+					scent hounds for hunting small game like rabbits. Their intelligence
+					and cheerful nature make them great family pets and working
+					companions.
+				</p>
+
+				<table class="meta-data">
+					<caption class="display-none">
+						metadata
+					</caption>
+
+					<tr>
+						<th>id:</th>
+						<td>d44482a7aad24946f9a7534243d5e076</td>
+					</tr>
+					<tr>
+						<th>filename:</th>
+						<td>Beagle.md</td>
+					</tr>
+					<tr>
+						<th>uri:</th>
+						<td>http://?????</td>
+					</tr>
+				</table>
+			</article>
+		</template>
+	</body>
+</html>

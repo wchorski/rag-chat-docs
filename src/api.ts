@@ -4,6 +4,8 @@ import path, { dirname } from "node:path"
 import AutoLoad from "@fastify/autoload"
 import { fastifyEnv } from "@fastify/env"
 import { fastifyMultipart } from "@fastify/multipart"
+import { fastifyCors } from "@fastify/cors"
+import { fastifyStatic } from "@fastify/static"
 
 export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = dirname(__filename)
@@ -29,6 +31,7 @@ type Envs = {
 	EMBEDDING_MODEL: string
 	PORT: number
 	HOST: string
+	WEB_DOMAIN: string | undefined
 	NODE_ENV: "development" | "production"
 }
 
@@ -62,15 +65,33 @@ await fastify.register(fastifyEnv, {
 const envs = fastify.getEnvs<Envs>()
 
 fastify.register(fastifyMultipart)
+fastify.register(fastifyStatic, {
+	root: path.join(__dirname, "../public"),
+})
 
 fastify.register(AutoLoad, {
 	dir: path.join(__dirname, "plugins"),
 	options: Object.assign({}, opts),
 })
 
+
+fastify.get("/", (_req, reply) => {
+	// console.log(req.body)
+	reply.sendFile("index.html")
+})
+// fastify.get("/", async () => {
+// 	return { hello: "world" }
+// })
+
 fastify.register(AutoLoad, {
 	dir: path.join(__dirname, "api"),
 	options: Object.assign({ prefix: "/api" }, opts),
+})
+
+fastify.register(fastifyCors, {
+	origin: ["localhost", "127.0.0.1", envs.WEB_DOMAIN].filter(
+		Boolean
+	) as string[], // true = allow access from all origins
 })
 
 fastify.listen({ port: envs.PORT, host: envs.HOST }, function (err, address) {

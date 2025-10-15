@@ -3,7 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
-    "target": "es2024",
+    "target": "esnext",
     "lib": [
       "ES2021",
       "ES2022.Object",
@@ -11,8 +11,9 @@
       "es2023",
       "es2024"
     ],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "skipLibCheck": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "declaration": true,
     "noImplicitReturns": true,

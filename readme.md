@@ -159,3 +159,5 @@ are deployed with seperate docker containers
 ## Credits
 - https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
 - https://github.com/fastify/fastify-env
+- https://fastify.dev/docs/latest/Reference/TypeScript/
+- https://medium.com/@robinviktorsson/setting-up-a-modern-typescript-project-with-vite-no-framework-07ea2d3a22b5
