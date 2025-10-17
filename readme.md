@@ -160,6 +160,8 @@ are deployed with seperate docker containers
 - [ ] test with bigger data set for `dogs`
 - [ ] integrate easy way to have multi data sets
 - [ ] test with empoloyee wiki `.md` files
+- [ ] docker compose for production (db, llm, and node app w Dockerfile)
+- [ ] frontend `<select>` for different collecions. auto generate with manifest.json
 
 ---
 
