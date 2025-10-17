@@ -55,6 +55,7 @@ function uiRenderSearchResultEls(data, values) {
 		const id = data.ids[0][i]
 
 		const template = searchResultCardTemplate.content.cloneNode(true)
+		template.id = id
 		const titleEl = template.querySelector(".title")
 		titleEl.textContent = metadata.title
 
@@ -68,20 +69,28 @@ function uiRenderSearchResultEls(data, values) {
 		documentEl.textContent = doc
 
 		const metadataTableEl = template.querySelector("table.meta-data")
-		metadataTableEl.innerHTML = `
-      <tr>
-        <th>id:</th>
-        <td>${id}</td>
-      </tr>
-      <tr>
-        <th>filename:</th>
-        <td>${metadata.filename}</td>
-      </tr>
-      <tr>
-        <th>uri:</th>
-        <td>http://moeits.net/docs/${metadata.filename}</td>
-      </tr>
-    `
+		let innerHTML = ""
+		for (const [key, value] of Object.entries(data)) {
+			innerHTML += "  <tr>\n"
+			innerHTML += `    <th>${key}</th>\n`
+			innerHTML += `    <td>${value}</td>\n`
+			innerHTML += "  </tr>\n"
+		}
+		metadataTableEl.innerHTML = innerHTML
+		// metadataTableEl.innerHTML = `
+    //   <tr>
+    //     <th>id:</th>
+    //     <td>${id}</td>
+    //   </tr>
+    //   <tr>
+    //     <th>filename:</th>
+    //     <td>${metadata.filename}</td>
+    //   </tr>
+    //   <tr>
+    //     <th>uri:</th>
+    //     <td>http://moeits.net/docs/${metadata.filename}</td>
+    //   </tr>
+    // `
 		const li = document.createElement("li")
 		li.appendChild(template)
 		searchResListEl.appendChild(li)

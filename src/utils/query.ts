@@ -1,10 +1,10 @@
 import { getCollection } from "./chroma-collections.js"
 
-const dogCollection = await getCollection("dogs")
+export async function dbQuery(collectionName:string, question: string, n:number) {
 
-export async function dogQuery(question: string, n:number) {
+  const colletion = await getCollection(collectionName)
 
-	const res = await dogCollection.query({
+	const res = await colletion.query({
 		queryTexts: [question],
 		nResults: n,
 	})

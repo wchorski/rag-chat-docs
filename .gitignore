@@ -1,4 +1,6 @@
 docs/*
+public/markdown
+public/docs
 # Logs
 logs
 *.log

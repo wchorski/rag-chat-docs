@@ -1,0 +1,14 @@
+{
+  "collections": {
+    "dog_rescue": {
+      "name": "dog_rescue",
+      "document_directory": "./public/docs/dog_rescue",
+      "uri_base": "",
+      "llm": {
+        "temperature": 0.2,
+        "model": "llama3.2",
+        "instructions": "You are a helpful assistant. Answer the question based on the provided context. Use direct quotes from the referenced documents when applicable."
+      }
+    }
+  }
+}

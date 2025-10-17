@@ -22,6 +22,11 @@
 							The words submitted are semantically proccessed against a limited
 							number of documents. Returned are the top 3 closest matches.
 						</p>
+            <select name="collection">
+              <option value="dogs">Dog Breeds</option>
+              <option value="dog_rescue_data">Dog Rescue</option>
+              <option value="moeits_wiki">MOEITS Wiki</option>
+            </select>
 						<div class="text-and-submit-button">
 							<input
 								name="question"
@@ -36,7 +41,7 @@
 
 					<h2>Search Results:</h2>
           <p id="search-question"></p>
-					<ul id="search-results-list"></ul>
+					<ul id="search-results-list" class="nostyle"></ul>
 				</div>
 
 				<div class="flex-col">

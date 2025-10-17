@@ -4,10 +4,10 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/api.ts",
-    "ingest": "tsx src/injest.ts",
     "dev": "tsx watch src/api.ts",
     "build": "tsc",
-    "serve": "node dist/api.ts"
+    "serve": "node dist/api.ts",
+    "ingest": "tsx src/scripts/shell-injest.ts"
   },
   "dependencies": {
     "@chroma-core/default-embed": "^0.1.8",

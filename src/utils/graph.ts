@@ -43,6 +43,7 @@ const INSTRUCTIONS = `
   Use direct quotes from the referenced documents when applicable.
 `
 
+// TODO use the manifest.json
 // Node 2: Generate answer using LLM
 async function generate(state: GraphState): Promise<GraphState> {
 	console.log("💭 Generating answer...")

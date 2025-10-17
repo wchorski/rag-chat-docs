@@ -1,10 +1,11 @@
 "use strict"
 
 import type { FastifyInstance } from "fastify"
-import { dogQuery } from "../utils/query.js"
+import { dbQuery } from "../utils/query.js"
 
 interface IQuerystring {}
 interface IBody {
+  collection: string
 	question: string
 	n?: number
 }
@@ -31,16 +32,19 @@ export default async function routes(
 		Body: IBody
 	}>("/search", async (request, reply) => {
 		try {
-			const { question, n = 3 } = request.body
+			const { collection, question, n = 3 } = request.body
 
 			if (!question) {
 				return reply.code(400).send({ error: "Question is required" })
+			}
+			if (!collection) {
+				return reply.code(400).send({ error: "Cfollection is required" })
 			}
 
 			// console.log(`\n📥 Question: ${question}`)
 
 			// Run the LangGraph workflow
-			const result = await dogQuery(question, n)
+			const result = await dbQuery(collection, question, n)
 
 			// console.log(`📤 Answer generated\n`)
 
