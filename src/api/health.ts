@@ -1,13 +1,13 @@
 "use strict"
 
 import { FastifyInstance } from "fastify"
-import { getOrCreateCollection } from "../utils/chroma-collections.js"
+import { getCollection } from "../utils/chroma-collections.js"
 
 module.exports = async function (fastify: FastifyInstance, _opts:Object) {
 	fastify.get("/health/:collection", async (request, _reply) => {
 		try {
       const { collection } = request.params
-			const dbCollection = await getOrCreateCollection(collection)
+			const dbCollection = await getCollection(collection)
 			const count = await dbCollection.count()
 
 			return {

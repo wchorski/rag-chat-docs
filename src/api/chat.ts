@@ -1,26 +1,37 @@
 "use strict"
 
+import type { FastifyInstance } from "fastify"
 import { app } from "../utils/graph.js"
 
-
 // // Request body type
-// interface QueryRequest {
-// 	question: string
-// }
+type QueryRequest = {
+	body: {
+		question: string
+		collection: string
+	}
+}
 
-module.exports = async function (fastify, opts) {
-	fastify.post("/chat", async (request, reply) => {
+export default async function route(
+	fastify: FastifyInstance,
+	_options: Object
+) {
+	fastify.post("/chat", async (request: QueryRequest, reply) => {
 		try {
-			const { question } = request.body
+      
+			const { question, collection } = request.body
 
 			if (!question) {
 				return reply.code(400).send({ error: "Question is required" })
+			}
+			if (!collection) {
+				return reply.code(400).send({ error: "collection is required" })
 			}
 
 			// console.log(`\n📥 Question: ${question}`)
 
 			// Run the LangGraph workflow
 			const result = await app.invoke({
+        collection,
 				question,
 				context: null,
 				answer: null,

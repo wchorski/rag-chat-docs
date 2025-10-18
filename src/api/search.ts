@@ -21,7 +21,7 @@ interface IReply {
 	"5xx": { error: string }
 }
 
-export default async function routes(
+export default async function route(
 	fastify: FastifyInstance,
 	_options: Object
 ) {
@@ -30,7 +30,7 @@ export default async function routes(
 		Headers: IHeaders
 		Reply: IReply
 		Body: IBody
-	}>("/search", async (req:FastifyRequest, reply:FastifyReply) => {
+	}>("/search", async (req: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const { collection, question, n = 5 } = req.body
 

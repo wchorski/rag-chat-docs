@@ -112,11 +112,14 @@ function uiRenderChatResponse(data) {
 
 	const contextListEl = chatResponseEl.querySelector("ul.context")
 	const context = JSON.parse(data.context)
-	console.log(context)
-	const metadataEls = context.metadatas[0].map((metadata) => {
+	// console.log(context)
+	const metadataEls = context.metadatas[0].map((metadata, i) => {
 		const li = document.createElement("li")
-		li.textContent = `${metadata.title} | ${metadata.filename}`
+		const a = document.createElement("a")
+		a.href = context.uris[0][i]
+    a.textContent = `${metadata.title}`
 
+		li.append(a)
 		return li
 	})
 	contextListEl.append(...metadataEls)
@@ -163,7 +166,7 @@ async function searchQuery(values) {
 			body: JSON.stringify(values),
 		})
 		const data = await res.json()
-    
+
 		uiRenderSearchResultEls(data, values)
 
 		// TODO stop being lazy

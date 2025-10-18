@@ -3,10 +3,10 @@ import { ChatOllama } from "@langchain/ollama"
 import { getCollection } from "./chroma-collections.js"
 
 const OLLAMA_URL = "http://localhost:11434"
-const COLLECTION_NAME = "dogs"
 
 // Define the state interface
 interface GraphState {
+	collection: string
 	question: string
 	context: string | null
 	answer: string | null
@@ -24,16 +24,17 @@ const llm = new ChatOllama({
 async function retrieve(state: GraphState): Promise<GraphState> {
 	console.log("🔍 Retrieving relevant documents...")
 
-	const collection = await getCollection(COLLECTION_NAME)
+	const collection = await getCollection(state.collection)
+	if (!collection) throw new Error("collection not found")
 
 	// Query using text directly - ChromaDB handles embeddings
 	const results = await collection.query({
 		queryTexts: [state.question],
-		nResults: 3,
+		nResults: 5,
 	})
 
 	const context = JSON.stringify(results)
-
+	
 	return { ...state, context }
 }
 
@@ -72,6 +73,7 @@ async function generate(state: GraphState): Promise<GraphState> {
 // Build the graph
 const workflow = new StateGraph<GraphState>({
 	channels: {
+    collection: null,
 		question: null,
 		context: null,
 		answer: null,
