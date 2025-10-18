@@ -1,17 +1,20 @@
 "use strict"
 
-import { getCollection } from "../utils/chroma-collections.js"
+import { FastifyInstance } from "fastify"
+import { getOrCreateCollection } from "../utils/chroma-collections.js"
 
-module.exports = async function (fastify, opts) {
-	fastify.get("/health", async () => {
+module.exports = async function (fastify: FastifyInstance, _opts:Object) {
+	fastify.get("/health/:collection", async (request, _reply) => {
 		try {
-			const collection = await getCollection("dogs")
-			const count = await collection.count()
+      const { collection } = request.params
+			const dbCollection = await getOrCreateCollection(collection)
+			const count = await dbCollection.count()
 
 			return {
 				status: "healthy",
 				// chromaUrl: CHROMA_URL,
 				// ollamaUrl: OLLAMA_URL,
+        collection,
 				documentsCount: count,
 			}
 		} catch (error) {

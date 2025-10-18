@@ -1,6 +1,7 @@
 docs/*
 public/markdown
 public/docs
+config.json
 # Logs
 logs
 *.log

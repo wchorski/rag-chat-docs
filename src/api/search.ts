@@ -1,11 +1,11 @@
 "use strict"
 
-import type { FastifyInstance } from "fastify"
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify"
 import { dbQuery } from "../utils/query.js"
 
 interface IQuerystring {}
 interface IBody {
-  collection: string
+	collection: string
 	question: string
 	n?: number
 }
@@ -23,22 +23,22 @@ interface IReply {
 
 export default async function routes(
 	fastify: FastifyInstance,
-	options: Object
+	_options: Object
 ) {
 	fastify.post<{
 		Querystring: IQuerystring
 		Headers: IHeaders
 		Reply: IReply
 		Body: IBody
-	}>("/search", async (request, reply) => {
+	}>("/search", async (req:FastifyRequest, reply:FastifyReply) => {
 		try {
-			const { collection, question, n = 3 } = request.body
+			const { collection, question, n = 5 } = req.body
 
 			if (!question) {
 				return reply.code(400).send({ error: "Question is required" })
 			}
 			if (!collection) {
-				return reply.code(400).send({ error: "Cfollection is required" })
+				return reply.code(400).send({ error: "Collection Name is required" })
 			}
 
 			// console.log(`\n📥 Question: ${question}`)

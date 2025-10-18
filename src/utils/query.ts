@@ -9,7 +9,5 @@ export async function dbQuery(collectionName:string, question: string, n:number)
 		nResults: n,
 	})
 
-	// console.log(JSON.stringify(res, null, 2))
-
   return res
 }

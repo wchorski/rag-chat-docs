@@ -22,11 +22,11 @@
 							The words submitted are semantically proccessed against a limited
 							number of documents. Returned are the top 3 closest matches.
 						</p>
-            <select name="collection">
-              <option value="dogs">Dog Breeds</option>
-              <option value="dog_rescue_data">Dog Rescue</option>
-              <option value="moeits_wiki">MOEITS Wiki</option>
-            </select>
+						<select name="collection">
+							<option value="classic_games">classic_games</option>
+							<option value="dog_rescue">dog_rescue</option>
+							<option value="employee_wiki">employee_wiki</option>
+						</select>
 						<div class="text-and-submit-button">
 							<input
 								name="question"
@@ -40,7 +40,7 @@
 					</form>
 
 					<h2>Search Results:</h2>
-          <p id="search-question"></p>
+					<p id="search-question"></p>
 					<ul id="search-results-list" class="nostyle"></ul>
 				</div>
 
@@ -52,6 +52,11 @@
 							over by the LLM. The prompt is tuned with extra instructions. The
 							response will read in natural language.
 						</p>
+						<select name="collection">
+							<option value="classic_games">classic_games</option>
+							<option value="dog_rescue">dog_rescue</option>
+							<option value="employee_wiki">employee_wiki</option>
+						</select>
 						<div class="text-and-submit-button">
 							<input
 								name="question"

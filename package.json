@@ -7,7 +7,7 @@
     "dev": "tsx watch src/api.ts",
     "build": "tsc",
     "serve": "node dist/api.ts",
-    "ingest": "tsx src/scripts/shell-injest.ts"
+    "ingest": "tsx src/scripts/shell-ingest.ts"
   },
   "dependencies": {
     "@chroma-core/default-embed": "^0.1.8",

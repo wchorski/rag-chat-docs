@@ -16,9 +16,9 @@ const searchResultCardTemplate = document.getElementById(
 )
 
 // Get all TODOs and display them on the screen
-async function fetchHealthStats() {
+async function fetchHealthStats(collection) {
 	try {
-		const res = await fetch("/api/health", {
+		const res = await fetch(`/api/health/:${collection}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -39,7 +39,7 @@ async function fetchHealthStats() {
 /**
  *
  * @param {{distances: number[], documents: string[], embeddings: string[], ids: string[], include: string[], metadatas: {title:string, filename: string}[], uris: string[]}} data
- * @param {{question:string}} values
+ * @param {{question:string, collection:string}} values
  */
 function uiRenderSearchResultEls(data, values) {
 	searchResListEl.innerHTML = ""
@@ -70,7 +70,7 @@ function uiRenderSearchResultEls(data, values) {
 
 		const metadataTableEl = template.querySelector("table.meta-data")
 		let innerHTML = ""
-		for (const [key, value] of Object.entries(data)) {
+		for (const [key, value] of Object.entries(metadata)) {
 			innerHTML += "  <tr>\n"
 			innerHTML += `    <th>${key}</th>\n`
 			innerHTML += `    <td>${value}</td>\n`
@@ -78,22 +78,24 @@ function uiRenderSearchResultEls(data, values) {
 		}
 		metadataTableEl.innerHTML = innerHTML
 		// metadataTableEl.innerHTML = `
-    //   <tr>
-    //     <th>id:</th>
-    //     <td>${id}</td>
-    //   </tr>
-    //   <tr>
-    //     <th>filename:</th>
-    //     <td>${metadata.filename}</td>
-    //   </tr>
-    //   <tr>
-    //     <th>uri:</th>
-    //     <td>http://moeits.net/docs/${metadata.filename}</td>
-    //   </tr>
-    // `
+		//   <tr>
+		//     <th>id:</th>
+		//     <td>${id}</td>
+		//   </tr>
+		//   <tr>
+		//     <th>filename:</th>
+		//     <td>${metadata.filename}</td>
+		//   </tr>
+		//   <tr>
+		//     <th>uri:</th>
+		//     <td>http://moeits.net/docs/${metadata.filename}</td>
+		//   </tr>
+		// `
 		const li = document.createElement("li")
 		li.appendChild(template)
 		searchResListEl.appendChild(li)
+
+		fetchHealthStats(values.collection)
 	})
 }
 
@@ -161,7 +163,7 @@ async function searchQuery(values) {
 			body: JSON.stringify(values),
 		})
 		const data = await res.json()
-		// preSearch.textContent = JSON.stringify(data, null, 2)
+    
 		uiRenderSearchResultEls(data, values)
 
 		// TODO stop being lazy
@@ -237,5 +239,5 @@ async function ini() {
 
 document.addEventListener("DOMContentLoaded", function () {
 	ini()
-	fetchHealthStats()
+	// fetchHealthStats()
 })

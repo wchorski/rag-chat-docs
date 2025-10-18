@@ -157,6 +157,7 @@ are deployed with seperate docker containers
 - [ ] filer watcher for living docs
 - [ ] metadatas `uri` link directly with webpage (or file)
 - [ ] look into using fastify/vite for frontend instead of fastify/static
+  - [ ] or ejs with fastify view https://betterstack.com/community/guides/scaling-nodejs/introduction-to-fastify/
 - [ ] test with bigger data set for `dogs`
 - [ ] integrate easy way to have multi data sets
 - [ ] test with empoloyee wiki `.md` files

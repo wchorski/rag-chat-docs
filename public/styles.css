@@ -60,6 +60,7 @@ article.search-result-card {
 	padding: 1rem;
 	border-radius: 10px;
 	background-color: #0c0b1c;
+  border: solid #1f272e 1px;
 
 	& > header {
 		display: flex;
@@ -73,7 +74,7 @@ article.search-result-card {
 
 	& > table.meta-data {
 		border-collapse: collapse;
-		background-color: black;
+		background-color: #1f272e;
 		padding: 0.4rem;
 
 		& tr {

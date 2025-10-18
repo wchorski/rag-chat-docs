@@ -1,6 +1,6 @@
 import { StateGraph, END } from "@langchain/langgraph"
 import { ChatOllama } from "@langchain/ollama"
-import { client, getCollection } from "./chroma-collections.js"
+import { getCollection } from "./chroma-collections.js"
 
 const OLLAMA_URL = "http://localhost:11434"
 const COLLECTION_NAME = "dogs"
