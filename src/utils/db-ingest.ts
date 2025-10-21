@@ -1,4 +1,4 @@
-import fs from "fs/promises"
+import { readFile, readdir } from "node:fs/promises"
 import path from "path"
 import crypto from "crypto"
 import matter from "gray-matter" // <-- install with: npm i gray-matter
@@ -16,7 +16,7 @@ export async function ingestMarkdownDocs(
 	})
 
 	try {
-		const files = await fs.readdir(directory_path)
+		const files = await readdir(directory_path)
 		const mdFiles = files.filter((f) => f.endsWith(".md"))
 		console.log(
 			`📄 Found ${mdFiles.length} markdown files in '${directory_path}/*`
@@ -27,7 +27,7 @@ export async function ingestMarkdownDocs(
 		const allChunks = await Promise.all(
 			mdFiles.map(async (filename) => {
 				const filepath = path.join(directory_path, filename)
-				const raw = await fs.readFile(filepath, "utf-8")
+				const raw = await readFile(filepath, "utf-8")
 				const uri = uriBuilder(uri_base || "", filepath)
 
 				// Parse frontmatter
@@ -45,8 +45,8 @@ export async function ingestMarkdownDocs(
 						.update(`${filename}-chunk-${idx}`)
 						.digest("hex")
 
-          // TODO parse first line in chunk document as header. use as anchor in uri
-          // console.log({chunk});
+					// TODO parse first line in chunk document as header. use as anchor in uri
+					// console.log({chunk});
 					return {
 						id,
 						document: chunk,
@@ -68,7 +68,7 @@ export async function ingestMarkdownDocs(
 
 		console.log(`📦 Total chunks created: ${docs.length}`)
 
-    //! before added text splitting into chunks. remove later
+		//! before added text splitting into chunks. remove later
 		// const docs = await Promise.all(
 		// 	mdFiles.map(async (filename) => {
 		// 		const filepath = path.join(directory_path, filename)

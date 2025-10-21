@@ -5,7 +5,7 @@ import type { FastifyInstance } from "fastify";
  * @param {FastifyInstance} fastify  Encapsulated Fastify Instance
  * @param {Object} options plugin options, refer to https://fastify.dev/docs/latest/Reference/Plugins/#plugin-options
  */
-export default async function routes (fastify: FastifyInstance, options: Object) {
+export default async function routes (fastify: FastifyInstance, _options: Object) {
   fastify.get('/hello', async () => {
     return { hello: 'world' }
   })

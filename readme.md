@@ -146,6 +146,11 @@ You can modify these constants in the code:
 - `/search` **fast** simple vector search that only returns relevant documents
 - `/chat` **slow** pulls context from database and processes a natural language response
 
+## Ingest
+```
+pnpm ingest --collection="dogs" --dir_path="./docs/dogs"
+```
+
 ## Database & LLM
 
 are deployed with seperate docker containers

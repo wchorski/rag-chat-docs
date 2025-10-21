@@ -1,7 +1,9 @@
 'use strict'
 
-module.exports = async function (fastify, opts) {
-  fastify.get('/', async function (request, reply) {
+import { FastifyInstance } from "fastify"
+
+module.exports = async function (fastify:FastifyInstance, _opts:Object) {
+  fastify.get('/', async function () {
     return { status: 'ok', message: 'RAG API is running' }
   })
 }

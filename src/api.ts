@@ -22,7 +22,6 @@ const fastify = Fastify({
 const opts = {}
 
 type Envs = {
-	DB_COLLECTION: string
 	DB_USERNAME: string
 	DB_PASSWORD: string
 	DB_HOST: string
@@ -43,9 +42,8 @@ await fastify.register(fastifyEnv, {
 	confKey: "config",
 	schema: {
 		type: "object",
-		required: ["DB_COLLECTION"],
+		// required: ["DB_COLLECTION"],
 		properties: {
-			DB_COLLECTION: { type: "string" },
 			DB_USERNAME: { type: "string" },
 			DB_PASSWORD: { type: "string" },
 			DB_HOST: { type: "string", default: "localhost" },
