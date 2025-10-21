@@ -1,3 +1,7 @@
+.git
+.gitignore
+*.md
+dist
 docker-compose.yml
 compose.yml
 # Logs
