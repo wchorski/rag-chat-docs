@@ -1,4 +1,5 @@
 import Fastify from "fastify"
+import type { FastifyInstance } from "fastify"
 import { fileURLToPath } from "node:url"
 import path, { dirname } from "node:path"
 import AutoLoad from "@fastify/autoload"
@@ -14,7 +15,7 @@ export const __dirname = dirname(__filename)
 // import { dogQuery } from "./query.js"
 
 // TODO tie this in with NODE_ENV?
-const fastify = Fastify({
+const fastify: FastifyInstance = Fastify({
 	logger: false,
 })
 
@@ -38,6 +39,9 @@ type Envs = {
 await fastify.register(fastifyEnv, {
 	// TODO use dotenv.path for .env.dev vs .env.production
 	dotenv: true,
+	// dotenv: {
+  //   path: "../.env"
+  // },
 	data: process.env,
 	confKey: "config",
 	schema: {
@@ -71,7 +75,6 @@ fastify.register(AutoLoad, {
 	dir: path.join(__dirname, "plugins"),
 	options: Object.assign({}, opts),
 })
-
 
 fastify.get("/", (_req, reply) => {
 	// console.log(req.body)
