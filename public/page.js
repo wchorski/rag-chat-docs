@@ -16,9 +16,9 @@ const searchResultCardTemplate = document.getElementById(
 )
 
 // Get all TODOs and display them on the screen
-async function fetchHealthStats(collection) {
+async function fetchStats(collection) {
 	try {
-		const res = await fetch(`/api/health/:${collection}`, {
+		const res = await fetch(`/api/stats/${collection}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -57,7 +57,14 @@ function uiRenderSearchResultEls(data, values) {
 		const template = searchResultCardTemplate.content.cloneNode(true)
 		template.id = id
 		const titleEl = template.querySelector(".title")
-		titleEl.textContent = metadata.title
+		const link = document.createElement("a")
+    // TODO why is uris empty array?
+    // console.log(data);
+		// link.href = data.uris[i]
+		link.href = metadata.filepath
+		link.textContent = metadata.title
+		// titleEl.textContent = metadata.title
+		titleEl.append(link)
 
 		const distanceLabelEl = template.querySelector("label.distance")
 		const distanceSpanEl = distanceLabelEl.querySelector("span")
@@ -95,7 +102,7 @@ function uiRenderSearchResultEls(data, values) {
 		li.appendChild(template)
 		searchResListEl.appendChild(li)
 
-		fetchHealthStats(values.collection)
+		fetchStats(values.collection)
 	})
 }
 
@@ -117,7 +124,7 @@ function uiRenderChatResponse(data) {
 		const li = document.createElement("li")
 		const a = document.createElement("a")
 		a.href = context.uris[0][i]
-    a.textContent = `${metadata.title}`
+		a.textContent = `${metadata.title}`
 
 		li.append(a)
 		return li

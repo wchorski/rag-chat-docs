@@ -1,179 +1,23 @@
-# RAG MVP Application
+# Getting Started with [Fastify-CLI](https://www.npmjs.com/package/fastify-cli)
+This project was bootstrapped with Fastify-CLI.
 
-A minimal viable RAG (Retrieval-Augmented Generation) application using LangGraph, Fastify, Ollama, and ChromaDB.
+## Available Scripts
 
-## Prerequisites
+In the project directory, you can run:
 
-- Node.js 18+
-- ChromaDB running on `localhost:8000`
-- Ollama running on `localhost:11434`
-- Ollama model: `llama3.2`
+### `npm run dev`
 
-## Installation
+To start the app in dev mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-```bash
-npm install
-```
+### `npm start`
 
-The project uses TypeScript with `tsx` for development and can be compiled to JavaScript for production.
+For production mode
 
-## Setup
+### `npm run test`
 
-1. Create a `docs` directory and add your markdown files:
+Run the test cases.
 
-```bash
-mkdir docs
-# Add your .md files to the docs/ directory
-```
+## Learn More
 
-2. Pull required Ollama model:
-
-```bash
-ollama pull llama3.2
-```
-
-## Usage
-
-### Step 1: Ingest Documents
-
-Process and embed your markdown documents:
-
-```bash
-npm run ingest
-```
-
-This will:
-
-- Read all `.md` files from the `docs/` directory
-- Split them into chunks
-- Store them in ChromaDB (embeddings generated automatically by ChromaDB's default embedding function)
-
-### Step 2: Start the API Server
-
-For development (with auto-reload):
-
-```bash
-npm run dev
-```
-
-Or for production:
-
-```bash
-npm start
-```
-
-Or build and run compiled JavaScript:
-
-```bash
-npm run build
-npm run serve
-```
-
-The server will run on `http://localhost:3000`
-
-## API Endpoints
-
-### Health Check
-
-```bash
-curl http://localhost:3000/health
-```
-
-### Query
-
-```bash
-curl -X POST http://localhost:3000/query \
-  -H "Content-Type: application/json" \
-  -d '{"question": "What is the main topic of the documentation?"}'
-```
-
-Response:
-
-```json
-{
-	"question": "What is the main topic of the documentation?",
-	"answer": "Based on the context provided...",
-	"context": "Retrieved document chunks..."
-}
-```
-
-## Project Structure
-
-```
-.
-├── docs/              # Your markdown documents
-├── src/
-│   ├── server.ts      # Fastify API server
-│   ├── graph.ts       # LangGraph workflow
-│   └── ingest.ts      # Document ingestion script
-├── tsconfig.json      # TypeScript configuration
-└── package.json
-```
-
-## How It Works
-
-1. **Ingestion**: Documents are chunked and stored in ChromaDB with automatic embeddings
-2. **Retrieval**: User questions are automatically embedded by ChromaDB and similar chunks are retrieved
-3. **Generation**: LangGraph orchestrates the RAG workflow:
-   - `retrieve` node: Fetches relevant context from ChromaDB using `queryTexts`
-   - `generate` node: Uses Ollama LLM to generate answers based on context
-
-## Configuration
-
-You can modify these constants in the code:
-
-- `CHROMA_URL`: ChromaDB endpoint (default: `http://localhost:8000`)
-- `OLLAMA_URL`: Ollama endpoint (default: `http://localhost:11434`)
-- `COLLECTION_NAME`: ChromaDB collection name (default: `docs`)
-- Embedding: ChromaDB default embedding function (all-MiniLM-L6-v2)
-- LLM model: `llama3.2`
-- Chunk size: 1000 characters
-- Chunk overlap: 200 characters
-- Number of retrieved chunks: 3
-
-## Chat examples
-
-### Dogs Collection
-
-```json
-{
-	"question": "what is the shortest dog breed?"
-}
-```
-
-## API
-
-- `/search` **fast** simple vector search that only returns relevant documents
-- `/chat` **slow** pulls context from database and processes a natural language response
-
-## Ingest
-```
-pnpm ingest --collection="dogs" --dir_path="./docs/dogs"
-```
-
-## Database & LLM
-
-are deployed with seperate docker containers
-
-## TODO
-
-- [ ] `/api/upload` for user submitted documents
-- [ ] prevent duplicates (id is a has of file, modified file seen as new file)
-- [ ] filer watcher for living docs
-- [ ] metadatas `uri` link directly with webpage (or file)
-- [ ] look into using fastify/vite for frontend instead of fastify/static
-  - [ ] or ejs with fastify view https://betterstack.com/community/guides/scaling-nodejs/introduction-to-fastify/
-- [ ] test with bigger data set for `dogs`
-- [ ] integrate easy way to have multi data sets
-- [ ] test with empoloyee wiki `.md` files
-- [ ] docker compose for production (db, llm, and node app w Dockerfile)
-- [ ] frontend `<select>` for different collecions. auto generate with manifest.json
-
----
-
-## Credits
-
-- https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
-- https://github.com/fastify/fastify-env
-- https://fastify.dev/docs/latest/Reference/TypeScript/
-- https://medium.com/@robinviktorsson/setting-up-a-modern-typescript-project-with-vite-no-framework-07ea2d3a22b5
+To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).

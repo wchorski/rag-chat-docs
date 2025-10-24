@@ -32,9 +32,12 @@ async function retrieve(state: GraphState): Promise<GraphState> {
 		queryTexts: [state.question],
 		nResults: 5,
 	})
+	console.log({ results })
+
+  process.exit(0);
 
 	const context = JSON.stringify(results)
-	
+
 	return { ...state, context }
 }
 
@@ -73,7 +76,7 @@ async function generate(state: GraphState): Promise<GraphState> {
 // Build the graph
 const workflow = new StateGraph<GraphState>({
 	channels: {
-    collection: null,
+		collection: null,
 		question: null,
 		context: null,
 		answer: null,
@@ -83,8 +86,12 @@ const workflow = new StateGraph<GraphState>({
 workflow.addNode("retrieve", retrieve)
 workflow.addNode("generate", generate)
 
+// TODO why is TS mad?
+//@ts-ignore
 workflow.setEntryPoint("retrieve")
+//@ts-ignore
 workflow.addEdge("retrieve", "generate")
+//@ts-ignore
 workflow.addEdge("generate", END)
 
 export const app = workflow.compile()

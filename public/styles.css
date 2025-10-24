@@ -42,6 +42,11 @@ body {
 	}
 }
 
+a:link { color: #a3d0f8; }
+a:visited { color: #698ba9; }
+a:hover { color: #3299f3; }
+a:active { color: rgb(95, 235, 95)f8; }
+
 ul.nostyle {
 	list-style: none;
 	padding: 0;

@@ -53,7 +53,7 @@ export async function ingestMarkdownDocs(
 						metadata: {
 							...frontmatter,
 							filename,
-							filepath,
+							filepath: removePublicPrefix(filepath),
 							chunkIndex: idx,
 							totalChunks: chunks.length,
 						},
@@ -95,33 +95,20 @@ export async function ingestMarkdownDocs(
 
 		const collection = await getOrCreateCollection(collection_name)
 		const prevCount = await collection.count()
-		// console.log(`📀 db prevCount: ${prevCount}`)
 
-		// // TODO Optional: clear collection before adding (only for dev/testing)
-		// // await collection.delete({ ids: docs.map((doc) => doc.id) })
+		startSpinner("💿 db: Adding to collection...")
 
-		// const transformData = {
-		// 	ids: docs.map((d) => d.id),
-		// 	documents: docs.map((d) => d.document),
-		// 	metadatas: docs.map((d) => d.metadata),
-		// 	uris: docs.map((d) => d.uri),
-		// }
-		// console.log(transformData)
-		// process.abort()
-
-		startSpinner("Adding to collection...")
-
+		// console.log(docs.map((d) => d.uri))
 		await collection.add({
 			ids: docs.map((d) => d.id),
 			documents: docs.map((d) => d.document),
 			metadatas: docs.map((d) => d.metadata),
+			// TODO why is uris empty array?
 			uris: docs.map((d) => d.uri),
 		})
 
-		stopSpinner("Database additions complete!", true)
-
 		const currCount = await collection.count()
-		console.log(`💿 db: ${currCount - prevCount} documents added`)
+		stopSpinner(`💿 db: ${currCount - prevCount} documents added`, true)
 
 		const peek = await collection.peek({})
 		console.log(`✅ "${collection_name}" Collection Peek: `, {
@@ -148,7 +135,7 @@ const uriBuilder = (base: string, path: string) => {
 	return base + removedPrefix
 }
 
-const removePublicPrefix = (str: string) => str.replace(/^public\/?/, "/")
+const removePublicPrefix = (str: string) => str.replace(/.*public\/?/, "/")
 
 const spinners = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
 let i = 0
