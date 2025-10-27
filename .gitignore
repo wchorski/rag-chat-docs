@@ -8,6 +8,8 @@ logs
 *.log
 npm-debug.log*
 .env
+.env.prod
+.env.dev
 public/docs
 
 # Runtime data

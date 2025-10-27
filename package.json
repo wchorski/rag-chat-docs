@@ -15,7 +15,7 @@
     "ts:build": "tsc",
     "dev": "pnpm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,App\" -c \"yellow.bold,cyan.bold\" \"pnpm:watch:ts\" \"pnpm:dev:start\"",
     "dev:start": "fastify start --ignore-watch=.ts$ -w -l info -P dist/app.js",
-    "db:ingest": "tsx src/scripts/shell-ingest.ts",
+    "db:ingest": "tsx --env-file='.env' src/scripts/shell-ingest.ts",
     "db:destroy": "tsx src/scripts/shell-db-collection-destroy.ts"
   },
   "keywords": [],

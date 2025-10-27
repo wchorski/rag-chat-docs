@@ -6,8 +6,6 @@ import { dbQuery } from "./query.js"
 // TODO how to use fastify envs?
 const OLLAMA_URL = process.env.OLLAMA_URL
 const OLLAMA_CHAT_MODEL = process.env.OLLAMA_CHAT_MODEL
-// const OLLAMA_URL = "http://localhost:11434"
-// const OLLAMA_CHAT_MODEL = "mistral"
 
 // Define the state interface
 interface GraphState {

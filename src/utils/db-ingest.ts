@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises"
 import path from "path"
 import crypto from "crypto"
 import matter from "gray-matter" // <-- install with: npm i gray-matter
-import { dbGetOrCreateCollection } from "./chroma-collections.js"
+import { dbGetOrCreateCollection } from "./chroma-collections"
 import { MarkdownTextSplitter } from "@langchain/textsplitters"
 
 export async function ingestMarkdownDocs(
@@ -33,11 +33,38 @@ export async function ingestMarkdownDocs(
 				// Parse frontmatter
 				const { data: frontmatter, content } = matter(raw)
 
+				// Convert array fields to csv strings for ChromaDB compatibility
+				const sanitizedMetadata = Object.entries(frontmatter).reduce(
+					(acc, [key, value]) => {
+						// Skip null and undefined values entirely
+						if (value === null || value === undefined) {
+							return acc
+						}
+						
+						// Sanitize the key: replace hyphens with underscores
+						const sanitizedKey = key.replace(/-/g, "_")
+						
+						if (Array.isArray(value)) {
+							// Skip empty arrays
+							if (value.length === 0) return acc
+							acc[sanitizedKey] = value.join(", ")
+						} else if (value instanceof Date) {
+							acc[sanitizedKey] = value.toISOString()
+						} else if (typeof value === 'object') {
+							// Convert objects to JSON strings
+							acc[sanitizedKey] = JSON.stringify(value)
+						} else {
+							acc[sanitizedKey] = value
+						}
+						return acc
+					},
+					{} as Record<string, any>
+				)
 				// Split content into chunks
 				const chunks = await splitter.splitText(content.trim())
 				console.log(`  ├─ ${filename}: ${chunks.length} chunks`)
 
-        // TODO figure out why `Crash Bandicoot.md` chunks `## Gamplay` with no content
+				// TODO figure out why `Crash Bandicoot.md` chunks `## Gamplay` with no content
 				// Create a doc entry for each chunk, all sharing the same metadata & URI
 				return chunks.map((chunk, idx) => {
 					// Unique ID per chunk: hash of filename + chunk index
@@ -52,7 +79,7 @@ export async function ingestMarkdownDocs(
 						id,
 						document: chunk,
 						metadata: {
-							...frontmatter,
+							...sanitizedMetadata,
 							filename,
 							filepath: removePublicPrefix(filepath),
 							chunk_index: idx,
@@ -69,35 +96,23 @@ export async function ingestMarkdownDocs(
 
 		console.log(`📦 Total chunks created: ${docs.length}`)
 
-		//! before added text splitting into chunks. remove later
-		// const docs = await Promise.all(
-		// 	mdFiles.map(async (filename) => {
-		// 		const filepath = path.join(directory_path, filename)
-		// 		const raw = await fs.readFile(filepath, "utf-8")
-		// 		const uri = uriBuilder(uri_base || "", filepath)
-
-		// 		// Parse frontmatter
-		// 		const { data: frontmatter, content } = matter(raw)
-		// 		const id = crypto.createHash("md5").update(filename).digest("hex") // stable per file
-
-		// 		return {
-		// 			id,
-		// 			document: content.trim(),
-		// 			metadata: {
-		// 				...frontmatter,
-		// 				filename,
-		// 				filepath,
-		//         filetype: ".md"
-		// 			},
-		// 			uri,
-		// 		}
-		// 	})
-		// )
-
 		const collection = await dbGetOrCreateCollection(collection_name)
 		const prevCount = await collection.count()
 
 		startSpinner("💿 db: Adding to collection...")
+
+		docs.forEach((doc, idx) => {
+			Object.entries(doc.metadata).forEach(([key, value]) => {
+				const validTypes = ["string", "number", "boolean"]
+				if (value !== null && !validTypes.includes(typeof value)) {
+					console.error(`❌ Invalid metadata in doc ${idx}:`, {
+						key,
+						value,
+						type: typeof value,
+					})
+				}
+			})
+		})
 
 		// console.log(docs.map((d) => d.uri))
 		await collection.add({
@@ -120,10 +135,6 @@ export async function ingestMarkdownDocs(
 			metadatas: peek.metadatas.length,
 			uris: peek.uris.length,
 		})
-		// console.log(
-		// 	"✅ Collection peek.metadatas names:\n",
-		// 	peek.metadatas.flatMap((meta) => meta?.name)
-		// )
 	} catch (error) {
 		stopSpinner("Database additions failed!", false)
 		console.log("❌ db-ingest.ts ERROR: ", error)

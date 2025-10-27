@@ -1,14 +1,15 @@
 import { OllamaEmbeddingFunction } from "@chroma-core/ollama"
 import { ChromaClient } from "chromadb"
 
-const DB_HOST = process.env.DB_HOST
-const DB_PORT = Number(process.env.DB_PORT)
+const DB_HOST = process.env.DB_HOST || "localhost"
+const DB_PORT = process.env.DB_PORT ? Number(process.env.DB_PORT) : 8000
 const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL
-const OLLAMA_URL = process.env.OLLAMA_URL
+const OLLAMA_URL = process.env.OLLAMA_URL || "http://locahost:11434"
 
 export const client = new ChromaClient({ host: DB_HOST, port: DB_PORT })
 
 export const dbGetOrCreateCollection = async (collectionName: string) => {
+	console.log({ DB_HOST, DB_PORT, OLLAMA_URL })
 	const collection = await client.getOrCreateCollection({
 		name: collectionName,
 		// no embed = @chroma-core/default-embed
