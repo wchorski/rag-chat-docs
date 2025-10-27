@@ -63,7 +63,7 @@ function uiRenderSearchResultEls(data, values) {
 		// link.href = data.uris[i]
 		link.href = metadata.filepath
 		link.target = "_blank"
-		link.textContent = metadata.title
+		link.textContent = metadata.title || metadata.filename
 		// titleEl.textContent = metadata.title
 		titleEl.append(link)
 
@@ -130,7 +130,7 @@ function uiRenderChatResponse(data) {
 		// a.href = context.uris[0][i]
 		a.href = metadata.filepath
 		a.target = "_blank"
-		a.textContent = `${metadata.title}`
+		a.textContent = metadata.title || metadata.filename
 		const small = document.createElement("small")
 
 		small.textContent = ` | index: ${metadata.chunk_index}, match: ${(
