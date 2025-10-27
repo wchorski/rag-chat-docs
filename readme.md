@@ -10,14 +10,17 @@ In the project directory, you can run:
 To start the app in dev mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm start`
+### `pnpm start`
 
 For production mode
 
-### `npm run test`
+### `pnpm run test`
 
 Run the test cases.
 
 ## Learn More
 
 To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
+
+## TODO 
+- [ ] look into schema + ts types generation - https://fastify.dev/docs/latest/Reference/TypeScript/#json-schema-to-typescript

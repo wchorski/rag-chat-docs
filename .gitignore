@@ -1,7 +1,14 @@
+db
+config.json
+compose.yml
+compose-dev.yml
+docker-compose.yml
 # Logs
 logs
 *.log
 npm-debug.log*
+.env
+public/docs
 
 # Runtime data
 pids

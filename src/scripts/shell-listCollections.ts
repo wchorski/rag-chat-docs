@@ -1,3 +1,7 @@
-import { dbListAllCollections } from "../utils/chroma-collections.js";
+import { dbListAllCollections } from "../utils/chroma-collections.js"
 
-await dbListAllCollections()
+async function shell_listCollections() {
+	await dbListAllCollections()
+}
+
+shell_listCollections()

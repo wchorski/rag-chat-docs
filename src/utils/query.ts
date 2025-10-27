@@ -1,13 +1,21 @@
-import { getCollection } from "./chroma-collections.js"
+import { dbGetCollection } from "./chroma-collections.js"
 
-export async function dbQuery(collectionName:string, question: string, n:number) {
+export async function dbQuery(
+	collectionName: string,
+	question: string,
+	n: number
+) {
+	try {
+		const colletion = await dbGetCollection(collectionName)
+		if (!colletion) throw new Error(`❌ collection ${collectionName} not found`)
 
-  const colletion = await getCollection(collectionName)
+		const res = await colletion.query({
+			queryTexts: [question],
+			nResults: n,
+		})
 
-	const res = await colletion.query({
-		queryTexts: [question],
-		nResults: n,
-	})
-
-  return res
+		return res
+	} catch (error) {
+		console.log(error)
+	}
 }

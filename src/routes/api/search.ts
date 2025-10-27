@@ -29,7 +29,7 @@ const search: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 		Body: IBody 
 	}>("/search", async (request, reply) => {
 		try {
-			const { collection, question, n = 5 } = request.body
+			const { collection, question, n = 7 } = request.body
 
 			if (!question) {
 				return reply.code(400).send({ error: "Question is required" })

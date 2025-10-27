@@ -2,7 +2,7 @@ import { readFile, readdir } from "node:fs/promises"
 import path from "path"
 import crypto from "crypto"
 import matter from "gray-matter" // <-- install with: npm i gray-matter
-import { getOrCreateCollection } from "./chroma-collections.js"
+import { dbGetOrCreateCollection } from "./chroma-collections.js"
 import { MarkdownTextSplitter } from "@langchain/textsplitters"
 
 export async function ingestMarkdownDocs(
@@ -37,6 +37,7 @@ export async function ingestMarkdownDocs(
 				const chunks = await splitter.splitText(content.trim())
 				console.log(`  ├─ ${filename}: ${chunks.length} chunks`)
 
+        // TODO figure out why `Crash Bandicoot.md` chunks `## Gamplay` with no content
 				// Create a doc entry for each chunk, all sharing the same metadata & URI
 				return chunks.map((chunk, idx) => {
 					// Unique ID per chunk: hash of filename + chunk index
@@ -54,8 +55,8 @@ export async function ingestMarkdownDocs(
 							...frontmatter,
 							filename,
 							filepath: removePublicPrefix(filepath),
-							chunkIndex: idx,
-							totalChunks: chunks.length,
+							chunk_index: idx,
+							total_chunks: chunks.length,
 						},
 						uri,
 					}
@@ -93,7 +94,7 @@ export async function ingestMarkdownDocs(
 		// 	})
 		// )
 
-		const collection = await getOrCreateCollection(collection_name)
+		const collection = await dbGetOrCreateCollection(collection_name)
 		const prevCount = await collection.count()
 
 		startSpinner("💿 db: Adding to collection...")

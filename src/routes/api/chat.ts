@@ -1,7 +1,7 @@
 "use strict"
 
 import type { FastifyPluginAsync } from "fastify"
-import { app } from "../../utils/graph"
+import { llm } from "../../utils/graph"
 
 // // Request body type
 interface IQuerystring {}
@@ -15,6 +15,7 @@ interface IReply {
 		question: string
 		answer: string
 		context: string
+		searchResults: string
 	}
 	302: { url: string }
 	"4xx": { error: string }
@@ -38,7 +39,7 @@ const chat: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 				// console.log(`\n📥 Question: ${question}`)
 
 				// Run the LangGraph workflow
-				const result = await app.invoke({
+				const result = await llm.invoke({
 					collection,
 					question,
 					context: null,
@@ -51,6 +52,7 @@ const chat: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 					question: result.question,
 					answer: result.answer,
 					context: result.context,
+					searchResults: result.searchResults,
 				})
 			} catch (error) {
 				console.error("Error processing query:", error)

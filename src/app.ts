@@ -39,7 +39,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 		confKey: "config",
 		schema: {
 			type: "object",
-			// required: ["DB_COLLECTION"],
+			required: ["OLLAMA_API", "OLLAMA_CHAT_MODEL", "EMBEDDING_MODEL"],
 			properties: {
 				DB_USERNAME: { type: "string" },
 				DB_PASSWORD: { type: "string" },
@@ -48,6 +48,10 @@ const app: FastifyPluginAsync<AppOptions> = async (
 				OLLAMA_API: {
 					type: "string",
 					default: "http://localhost:11434/api/embeddings",
+				},
+				OLLAMA_CHAT_MODEL: {
+					type: "string",
+					default: "mistral",
 				},
 				EMBEDDING_MODEL: { type: "string", default: "nomic-embed-text" },
 				PORT: { type: "string", default: "3000" },
@@ -87,7 +91,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 		options: opts,
 	})
 
-  // TODO do i not need this?
+	// TODO do i not need this?
 	// fastify.listen({ port: envs.PORT, host: envs.HOST }, function (err, address) {
 	// 	if (err) {
 	// 		fastify.log.error(err)
