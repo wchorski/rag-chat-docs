@@ -119,6 +119,7 @@ function uiRenderChatResponse(data) {
 	answerPEl.textContent = data.answer
 
 	const searchResultsListEl = chatResponseEl.querySelector(".search-results")
+	searchResultsListEl.innerHTML = ""
 	// TODO is there a way to send simple data instead of heavy parse on client?
 	const searchResults = JSON.parse(data.searchResults)
 	// console.log(context)

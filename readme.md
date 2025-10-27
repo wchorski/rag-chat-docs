@@ -24,3 +24,16 @@ To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs
 
 ## TODO 
 - [ ] look into schema + ts types generation - https://fastify.dev/docs/latest/Reference/TypeScript/#json-schema-to-typescript
+
+## Good Test Questions
+
+### employee_wiki
+- "how to reset employee password?"
+- "how to create a calendar group?"
+
+### classic_games
+- "open world games that are good even in modern times?"
+
+### dog_breeds
+- "dog with the best sense of smell"
+- "what are some cute orange cats?"
