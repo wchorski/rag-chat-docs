@@ -30,9 +30,9 @@
         "instructions": "You are a helpful assistant. Answer the question based on the provided context. Use direct quotes from the referenced documents when applicable."
       }
     },
-    "moeits_wiki": {
-      "name": "moeits_wiki",
-      "document_directory": "./public/docs/moeits_wiki",
+    "employee_wiki": {
+      "name": "employee_wiki",
+      "document_directory": "./public/docs/employee_wiki",
       "uri_base": "",
       "llm": {
         "temperature": 0.2,
