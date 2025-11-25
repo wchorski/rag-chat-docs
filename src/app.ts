@@ -44,7 +44,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
 				DB_USERNAME: { type: "string" },
 				DB_PASSWORD: { type: "string" },
 				DB_HOST: { type: "string", default: "localhost" },
-				DB_PORT: { type: "string", default: "5444" },
+				DB_PORT: { type: "string", default: "8000" },
 				OLLAMA_API: {
 					type: "string",
 					default: "http://localhost:11434/api/embeddings",
