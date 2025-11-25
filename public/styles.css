@@ -4,6 +4,10 @@ html {
 	background: inherit;
 }
 
+body > header {
+	max-width: 60rem;
+}
+
 body {
 	margin: 0;
 	padding: 0;
@@ -42,10 +46,18 @@ body {
 	}
 }
 
-a:link { color: #a3d0f8; }
-a:visited { color: #698ba9; }
-a:hover { color: #3299f3; }
-a:active { color: rgb(95, 235, 95)f8; }
+a:link {
+	color: #a3d0f8;
+}
+a:visited {
+	color: #698ba9;
+}
+a:hover {
+	color: #3299f3;
+}
+a:active {
+	color: rgb(95, 235, 95) f8;
+}
 
 ul.nostyle {
 	list-style: none;
@@ -60,12 +72,32 @@ ul.nostyle {
 	flex-direction: column;
 	gap: 0.4rem;
 }
+blockquote {
+  border-left: solid rgb(142, 142, 170) 3px;
+  margin-inline-start: 0;
+  padding-inline-start: 1rem;
+}
+
+table {
+  box-shadow: #00000080 4px 4px 8px;
+  padding: 1rem;
+  background-color: black;
+
+	& td {
+		padding: 0.3rem;
+		border-bottom: solid rgba(255, 255, 255, 0.439) 1px;
+	}
+
+	& thead td {
+		border-bottom-width: 4px;
+	}
+}
 
 article.search-result-card {
 	padding: 1rem;
 	border-radius: 10px;
 	background-color: #0c0b1c;
-  border: solid #1f272e 1px;
+	border: solid #1f272e 1px;
 
 	& > header {
 		display: flex;
@@ -254,4 +286,8 @@ form[data-state="pending"]::after {
 	& > div:first-child {
 		border-right: solid black 1px;
 	}
+}
+
+.lg-blackgrey {
+  background: linear-gradient(#111 0%, black 100%)
 }

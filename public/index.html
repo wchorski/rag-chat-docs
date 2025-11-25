@@ -11,10 +11,115 @@
 	<body>
 		<header>
 			<h1>RAG Chat Docs</h1>
+			<blockquote>
+				<p>
+					"Retrieval-Augmented Generation (RAG) is an advanced AI framework that
+					combines information retrieval with text generation models like GPT to
+					produce more accurate and up-to-date responses. Instead of relying
+					only on pre-trained data like traditional language models, RAG fetches
+					relevant documents from an external knowledge source before generating
+					an answer."
+				</p>
+				<a
+					href="https://www.geeksforgeeks.org/nlp/what-is-retrieval-augmented-generation-rag/"
+					target="_blank"
+					>geeksforgeeks.org</a
+				>
+			</blockquote>
+
+			<h2>What can RAG do for You</h2>
+			<p>
+				For this MVP there are 4 seperate document libraries that are
+				individually queried depending on the user's selection. If the document
+				libraries doesn't supply an adequate answer, it will not hallucinate a
+				response. View the
+				<a href="/docs" target="_blank">library documents</a> to understand the
+				scope of information LLM has access to.
+			</p>
+			<table>
+				<thead>
+					<tr>
+						<td>Library</td>
+						<td># of Docs</td>
+						<td>Desc.</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a href="/docs#dog-breeds">dog_breeds</a></td>
+						<td>3 docs</td>
+						<td>
+							Dog breed characteristics and attributes. Shows how focused a
+							library can be
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/docs#classic-games" target="_blank">classic_games</a>
+						</td>
+						<td>10 docs</td>
+						<td>
+							Collection of popular game reviews. Show off how opinionated
+							explinations can influence LLM output
+						</td>
+					</tr>
+					<tr>
+						<td><a href="/docs#dog-rescue" target="_blank">dog_rescue</a></td>
+						<td>20 docs</td>
+						<td>
+							Assortment of rescue dog personalities and traits. Show off a
+							collection of one-of-a-kind documents and connecting them to the
+							right user
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/docs#employee-wiki" target="_blank">employee_wiki</a>
+						</td>
+						<td>20 docs</td>
+						<td>
+							List of tutorials and walkthroughs. For scope sake, they only
+							focus on Zoom and Outlook problems
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h2>Example Prompts</h2>
+			<p>
+				Try out these example prompts. Some of the prompts purposfully ask wrong
+				questions to test hallucination
+			</p>
+
+			<h3>employee_wiki</h3>
+			<blockquote>"how to reset employee password?"</blockquote>
+			<blockquote>"how to create a calendar group?"</blockquote>
+			<blockquote>"Help me my computer doesn't work?"</blockquote>
+
+			<h3>classic_games</h3>
+			<blockquote>
+				"open world games that are good even in modern times?"
+			</blockquote>
+			<blockquote>
+				"What is a good game for new gamers with low skill?"
+			</blockquote>
+
+			<h3>dog_breeds</h3>
+			<blockquote>"dog with the best sense of smell"</blockquote>
+			<blockquote>"what are some cute orange cats?"</blockquote>
 		</header>
 
 		<main class="main">
-			<div class="flex side-by-side">
+			<h2>RAG App MVP</h2>
+			<p>
+				RAG AI processing goes through 2 processes. The Left Column is what
+				happens behind the scenes, semantically searching and returning relevant
+				documents from the library. The Right Column is the end user experience.
+				It runs the same "Search Documents", then process those documents with
+				an LLM to return a response in natural language.
+			</p>
+
+			<div class="flex side-by-side lg-blackgrey">
 				<div class="flex-col">
 					<form name="searchForm" data-state="idle">
 						<legend>Search Documents</legend>
