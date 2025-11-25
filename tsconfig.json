@@ -1,46 +1,21 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "fastify-tsconfig",
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "target": "esnext",
-    "lib": [
-      "ES2021",
-      "ES2022.Object",
-      "DOM",
-      "es2023",
-      "es2024"
+    "outDir": "dist",
+    "sourceMap": true
+  },
+  "paths": {
+    "@utils": [
+      "./utils"
     ],
-    "skipLibCheck": true,
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "esModuleInterop": true,
-    "declaration": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "useDefineForClassFields": true,
-    "strictPropertyInitialization": false,
-    "allowJs": true,
-    "strict": true,
-    "paths": {
-      "@utils": [
-        "./utils"
-      ],
-      "@api": [
-        "./src/api"
-      ],
-      "@plugins": [
-        "./src/plugins"
-      ]
-    },
+    "@api": [
+      "./src/routes/api"
+    ],
+    "@plugins": [
+      "./src/plugins"
+    ]
   },
   "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+    "src/**/*.ts"
+  ]
 }

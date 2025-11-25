@@ -1,16 +1,22 @@
 import { OllamaEmbeddingFunction } from "@chroma-core/ollama"
 import { ChromaClient } from "chromadb"
 
-export const client = new ChromaClient({ host: "localhost", port: 8000 })
+const DB_HOST = process.env.DB_HOST || "localhost"
+const DB_PORT = process.env.DB_PORT ? Number(process.env.DB_PORT) : 8000
+const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL
+const OLLAMA_URL = process.env.OLLAMA_URL || "http://locahost:11434"
 
-export const getOrCreateCollection = async (collectionName: string) => {
+export const client = new ChromaClient({ host: DB_HOST, port: DB_PORT })
+
+export const dbGetOrCreateCollection = async (collectionName: string) => {
+	console.log({ DB_HOST, DB_PORT, OLLAMA_URL })
 	const collection = await client.getOrCreateCollection({
 		name: collectionName,
 		// no embed = @chroma-core/default-embed
 		embeddingFunction: new OllamaEmbeddingFunction({
-			url: "http://localhost:11434/",
+			url: OLLAMA_URL,
 			// TODO test between these 2 embed models - https://cookbook.chromadb.dev/integrations/ollama/embeddings/#ollama-embedding-models
-			model: "nomic-embed-text",
+			model: EMBEDDING_MODEL,
 			// model: "all-minilm-l6-v2",
 		}),
 	})
@@ -18,14 +24,14 @@ export const getOrCreateCollection = async (collectionName: string) => {
 	return collection
 }
 
-export const getCollection = async (collectionName: string) => {
+export const dbGetCollection = async (collectionName: string) => {
 	const collection = await client.getCollection({
 		name: collectionName,
 		// no embed = @chroma-core/default-embed
 		embeddingFunction: new OllamaEmbeddingFunction({
-			url: "http://localhost:11434/",
+			url: OLLAMA_URL,
 			// TODO test between these 2 embed models - https://cookbook.chromadb.dev/integrations/ollama/embeddings/#ollama-embedding-models
-			model: "nomic-embed-text",
+			model: EMBEDDING_MODEL,
 			// model: "all-minilm-l6-v2",
 		}),
 	})
@@ -33,7 +39,7 @@ export const getCollection = async (collectionName: string) => {
 	return collection
 }
 
-export async function deleteCollection(name: string) {
+export async function dbDeleteCollection(name: string) {
 	await client.deleteCollection({ name })
 }
 

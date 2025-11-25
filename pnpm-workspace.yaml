@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - cpu-features
+  - esbuild
+  - onnxruntime-node
+  - protobufjs
+  - sharp
+  - ssh2

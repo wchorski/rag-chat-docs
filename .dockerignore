@@ -4,6 +4,7 @@
 dist
 docker-compose.yml
 compose.yml
+.env
 # Logs
 logs
 *.log

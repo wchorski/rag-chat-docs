@@ -1,14 +1,16 @@
-import type { FastifyInstance } from "fastify"
+// creds - https://snyk.io/blog/node-js-file-uploads-with-fastify/
+import type { FastifyPluginAsync } from "fastify"
 
 const path = require("node:path")
 
-export default async function route(fastify: FastifyInstance, _opts: Object) {
-	// Upload single or multiple files endpoint
+const givemefiles: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 	fastify.post("/upload", async (request, reply) => {
 		try {
+      // TODO figure out why TS is mad
+      //@ts-ignore
 			const files = await request.files()
 			const allDocuments = []
-			const results = []
+			const results:any[] = []
 
 			console.log({ files })
 
@@ -55,6 +57,62 @@ export default async function route(fastify: FastifyInstance, _opts: Object) {
 		}
 	})
 }
+
+export default givemefiles
+
+// export default async function route(fastify: FastifyInstance, _opts: Object) {
+// 	// Upload single or multiple files endpoint
+// 	fastify.post("/upload", async (request, reply) => {
+// 		try {
+// 			const files = await request.files()
+// 			const allDocuments = []
+// 			const results = []
+
+// 			console.log({ files })
+
+// 			for await (const file of files) {
+// 				try {
+// 					const buffer = await file.toBuffer()
+// 					const documents = parseFile(buffer, file.filename)
+// 					allDocuments.push(...documents)
+// 					results.push({
+// 						filename: file.filename,
+// 						documentsFound: documents.length,
+// 						status: "parsed",
+// 					})
+// 				} catch (error: any) {
+// 					fastify.log.error(`Error parsing ${file.filename}:`, error.toString())
+// 					results.push({
+// 						filename: file.filename,
+// 						status: "error",
+// 						error: error.message,
+// 					})
+// 				}
+// 			}
+
+// 			if (allDocuments.length === 0) {
+// 				return reply.code(400).send({
+// 					error: "No valid documents found",
+// 					files: results,
+// 				})
+// 			}
+
+// 			// const result = await insertDocuments(allDocuments)
+// 			// console.log(result)
+
+// 			return reply.send({
+// 				message: "Documents inserted successfully",
+// 				// totalDocuments: result.count,
+// 				totalDocuments: "debug",
+// 				files: results,
+// 				success: true,
+// 			})
+// 		} catch (error: any) {
+// 			fastify.log.error(error)
+// 			return reply.code(500).send({ error: error.message })
+// 		}
+// 	})
+// }
 
 function parseFile(data: any, filename: string) {
 	const ext = path.extname(filename).toLowerCase()

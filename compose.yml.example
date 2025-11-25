@@ -1,6 +1,8 @@
 services:
   db:
     image: chromadb/chroma:latest
+    container_name: rag-chag-db
+    restart: unless-stopped
     # ports:
     #   - "8000:8000"
     volumes:
@@ -8,16 +10,27 @@ services:
     environment:
       - ANONYMIZED_TELEMETRY=False
     networks:
-      - vectordb-llm-network
+      - rag-chat-docs-network
       
   llm:
     image: ollama/ollama:latest
+    container_name: rag-chat-llm
+    restart: unless-stopped
     # ports:
     #   - "11434:11434"
+    # command: >
+    #   ollama pull llama3.2
+    #   ollama pull nomic-embed-text
+    #   ollama list
+    environment:
+      - OLLAMA_PULL=llama3.2
+      # - OLLAMA_REQUEST_TIMEOUT=30s    # API request timeout
+      # - OLLAMA_KEEP_ALIVE=5m         # Model keep-alive duration
+      # - OLLAMA_MAX_QUEUE=512         # Maximum queued requests
     volumes:
       - ./db/ollama_data:/root/.ollama
     networks:
-      - vectordb-llm-network
+      - rag-chat-docs-network
     # deploy:
     #   resources:
     #     reservations:
@@ -28,10 +41,20 @@ services:
     depends_on:
       - db
   ## TODO docker file for api production build
-  # api:
-  #   Dockerfile:
+  api:
+    build: .
+    # volumes:
+    #   - ./public:/app/public
+    # ports:
+    #   - "3000:3000"
+    container_name: rag-chat-api
+    restart: unless-stopped
+    networks:
+      - rag-chat-docs-network
+    depends_on:
+      - db
 
 
 networks:
-  vectordb-llm-network:
+  rag-chat-docs-network:
     driver: bridge

@@ -8,7 +8,7 @@ if (!searchForm || !chatForm) throw new Error("form(s) not found")
 const searchResListEl = document.getElementById("search-results-list")
 const chatResponseEl = document.getElementById("chat-response")
 const searchQuestionEl = document.getElementById("search-question")
-const preHealth = document.getElementById("pre-health")
+const preHealth = document.getElementById("pre-stats")
 if (!preHealth) throw new Error("preHealth not found in dom")
 // const preSearch = document.querySelector("#pre-search")
 const searchResultCardTemplate = document.getElementById(
@@ -16,9 +16,9 @@ const searchResultCardTemplate = document.getElementById(
 )
 
 // Get all TODOs and display them on the screen
-async function fetchHealthStats(collection) {
+async function fetchStats(collection) {
 	try {
-		const res = await fetch(`/api/health/:${collection}`, {
+		const res = await fetch(`/api/stats/${collection}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -57,7 +57,15 @@ function uiRenderSearchResultEls(data, values) {
 		const template = searchResultCardTemplate.content.cloneNode(true)
 		template.id = id
 		const titleEl = template.querySelector(".title")
-		titleEl.textContent = metadata.title
+		const link = document.createElement("a")
+		// TODO why is uris empty array?
+		// console.log(data);
+		// link.href = data.uris[i]
+		link.href = metadata.filepath
+		link.target = "_blank"
+		link.textContent = metadata.title || metadata.filename
+		// titleEl.textContent = metadata.title
+		titleEl.append(link)
 
 		const distanceLabelEl = template.querySelector("label.distance")
 		const distanceSpanEl = distanceLabelEl.querySelector("span")
@@ -95,13 +103,13 @@ function uiRenderSearchResultEls(data, values) {
 		li.appendChild(template)
 		searchResListEl.appendChild(li)
 
-		fetchHealthStats(values.collection)
+		fetchStats(values.collection)
 	})
 }
 
 /**
  *
- * @param {{question: string, answer:string, context: {distances: number[], documents: string[], embeddings: string[], ids: string[], include: string[], metadatas: {title:string, filename: string}[], uris: string[]}}} data
+ * @param {{question: string, answer:string, context: string, searchResults: {distances: number[], documents: string[], embeddings: string[], ids: string[], include: string[], metadatas: {title:string, filename: string}[], uris: string[]}}} data
  */
 function uiRenderChatResponse(data) {
 	const questionPEl = chatResponseEl.querySelector("p.question")
@@ -110,19 +118,30 @@ function uiRenderChatResponse(data) {
 	const answerPEl = chatResponseEl.querySelector("p.answer")
 	answerPEl.textContent = data.answer
 
-	const contextListEl = chatResponseEl.querySelector("ul.context")
-	const context = JSON.parse(data.context)
+	const searchResultsListEl = chatResponseEl.querySelector(".search-results")
+	searchResultsListEl.innerHTML = ""
+	// TODO is there a way to send simple data instead of heavy parse on client?
+	const searchResults = JSON.parse(data.searchResults)
 	// console.log(context)
-	const metadataEls = context.metadatas[0].map((metadata, i) => {
+	const metadataEls = searchResults.metadatas[0].map((metadata, i) => {
+		const matchDecimal = 1 - searchResults.distances[0][i]
+
 		const li = document.createElement("li")
 		const a = document.createElement("a")
-		a.href = context.uris[0][i]
-    a.textContent = `${metadata.title}`
+		// a.href = context.uris[0][i]
+		a.href = metadata.filepath
+		a.target = "_blank"
+		a.textContent = metadata.title || metadata.filename
+		const small = document.createElement("small")
 
-		li.append(a)
+		small.textContent = ` | index: ${metadata.chunk_index}, match: ${(
+			matchDecimal * 100
+		).toFixed(1)}%`
+
+		li.append(a, small)
 		return li
 	})
-	contextListEl.append(...metadataEls)
+	searchResultsListEl.append(...metadataEls)
 }
 
 /**
@@ -138,9 +157,7 @@ async function chatQuery(values) {
 			body: JSON.stringify(values),
 		})
 		const data = await res.json()
-		// console.log(JSON.stringify(data, null, 2))
-		// console.log(data)
-		// chatResponseEl.textContent = data.answer
+		console.log(data)
 		uiRenderChatResponse(data)
 
 		// TODO stop being lazy
@@ -244,3 +261,9 @@ document.addEventListener("DOMContentLoaded", function () {
 	ini()
 	// fetchHealthStats()
 })
+
+// /** @param {number} num */
+// const invertDecimal = (num) => {
+// 	return  1 - num
+// 	// return (matchDecimal * 100).toFixed(1)
+// }
