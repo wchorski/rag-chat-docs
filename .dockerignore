@@ -2,6 +2,7 @@
 .gitignore
 *.md
 dist
+db
 docker-compose.yml
 compose.yml
 .env

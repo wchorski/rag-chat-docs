@@ -25,7 +25,7 @@ COPY --from=builder /app/pnpm-lock.yaml .
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
-COPY .env .env
+# COPY --from=builder /app/.env ./env
 
 EXPOSE 3000
 

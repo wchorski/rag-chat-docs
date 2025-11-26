@@ -1,7 +1,7 @@
 services:
   db:
     image: chromadb/chroma:latest
-    container_name: rag-chag-db
+    container_name: rag-chat-db
     restart: unless-stopped
     # ports:
     #   - "8000:8000"
@@ -9,21 +9,19 @@ services:
       - ./db/chroma_data:/data
     environment:
       - ANONYMIZED_TELEMETRY=False
+      - CHROMA_SERVER_CORS_ALLOW_ORIGINS=["http://localhost:3000", "http://api:3000"]
     networks:
       - rag-chat-docs-network
-      
+
   llm:
     image: ollama/ollama:latest
     container_name: rag-chat-llm
     restart: unless-stopped
     # ports:
     #   - "11434:11434"
-    # command: >
-    #   ollama pull llama3.2
-    #   ollama pull nomic-embed-text
-    #   ollama list
     environment:
-      - OLLAMA_PULL=llama3.2
+      - OLLAMA_PULL=${OLLAMA_CHAT_MODEL}
+      # - OLLAMA_DEBUG=false  # Reduce debug output
       # - OLLAMA_REQUEST_TIMEOUT=30s    # API request timeout
       # - OLLAMA_KEEP_ALIVE=5m         # Model keep-alive duration
       # - OLLAMA_MAX_QUEUE=512         # Maximum queued requests
@@ -38,22 +36,58 @@ services:
     #         - driver: nvidia
     #           count: all
     #           capabilities: [gpu]
+    entrypoint: /bin/bash
+    command: >
+      -c "
+      /bin/ollama serve &
+      sleep 5 &&
+      ollama pull ${OLLAMA_CHAT_MODEL} &&
+      ollama pull ${EMBEDDING_MODEL} &&
+      wait
+      "
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
   ## TODO docker file for api production build
   api:
     build: .
     # volumes:
     #   - ./public:/app/public
-    # ports:
-    #   - "3000:3000"
+    ports:
+      - "3000:3000"
     container_name: rag-chat-api
     restart: unless-stopped
+    env_file:
+      - .env
     networks:
       - rag-chat-docs-network
     depends_on:
       - db
-
+  
+  ## TODO: Figure out a way to ingest seed documents upon deploy
+  # ingest:
+  #   image: rag-chat-docs-api:latest
+  #   pull_policy: never # Don't try to pull from registry
+  #   container_name: rag-chat-ingest
+  #   restart: "no" # Run once and exit
+  #   # restart: unless-stopped # Run once and exit
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - rag-chat-docs-network
+  #   depends_on:
+  #     llm:
+  #       condition: service_healthy # Wait for llm to be healthy
+  #     api:
+  #       condition: service_started
+  #     db:
+  #       condition: service_started
+  #   command: node /app/dist/scripts/shell-ingest.js --collection="dog_breeds"
 
 networks:
   rag-chat-docs-network:

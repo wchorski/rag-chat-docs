@@ -39,7 +39,16 @@ const app: FastifyPluginAsync<AppOptions> = async (
 		confKey: "config",
 		schema: {
 			type: "object",
-			required: ["OLLAMA_API", "OLLAMA_CHAT_MODEL", "EMBEDDING_MODEL"],
+			required: [
+				"DB_HOST",
+				"DB_PORT",
+				"LLM_PROTOCOL",
+				"LLM_DOMAIN",
+				"LLM_PORT",
+				"OLLAMA_API",
+				"OLLAMA_CHAT_MODEL",
+				"EMBEDDING_MODEL",
+			],
 			properties: {
 				DB_USERNAME: { type: "string" },
 				DB_PASSWORD: { type: "string" },

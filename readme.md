@@ -22,6 +22,13 @@ Run the test cases.
 
 To learn Fastify, check out the [Fastify documentation](https://fastify.dev/docs/latest/).
 
+## Ingest after Deploy
+```shell
+docker exec -it rag-chat-api node /app/dist/scripts/shell-ingest.js --collection="dog_breeds"
+
+## Sub out `dog_breeds` for any other document folder you have in `/public/docs`
+```
+
 ## TODO 
 - [ ] look into schema + ts types generation - https://fastify.dev/docs/latest/Reference/TypeScript/#json-schema-to-typescript
 

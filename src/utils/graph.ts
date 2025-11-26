@@ -4,7 +4,11 @@ import { dbQuery } from "./query.js"
 // import fastify from "fastify"
 
 // TODO how to use fastify envs?
-const OLLAMA_URL = process.env.OLLAMA_URL
+const LLM_PROTOCOL = process.env.LLM_PROTOCOL || "http://"
+const LLM_DOMAIN = process.env.LLM_DOMAIN || "locahost"
+const LLM_PORT = process.env.LLM_PORT || "11434"
+const LLM_URL = LLM_PROTOCOL + "://" + LLM_DOMAIN + ":" + LLM_PORT
+// const OLLAMA_URL = process.env.OLLAMA_URL
 const OLLAMA_CHAT_MODEL = process.env.OLLAMA_CHAT_MODEL
 
 // Define the state interface
@@ -18,7 +22,7 @@ interface GraphState {
 
 const ollama = new ChatOllama({
 	model: OLLAMA_CHAT_MODEL,
-	baseUrl: OLLAMA_URL,
+	baseUrl: LLM_URL,
 	temperature: 0.2,
 })
 
